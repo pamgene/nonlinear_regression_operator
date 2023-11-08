@@ -112,7 +112,7 @@ if(model.function == "LL.4") {
     mutate(Span = d - c)
 } 
 
-df = df_result %>% 
+df_result = df_result %>% 
   dplyr::filter(!is.na(pseudo_R2))
 
 sum.table <- df_result %>%
