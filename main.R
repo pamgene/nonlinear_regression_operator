@@ -18,7 +18,7 @@ response.output <- as.numeric(trimws(strsplit(response.output, ",")[[1]]))
 relative.response <- ctx$op.value('relative.response', as.logical, TRUE)
 maximum.x <- ctx$op.value('maximum.x', as.double, 1e6)
 
-dose.transformation <- ctx$op.value('dose.transformation', as.character, "None") # log10, none
+dose.transformation <- ctx$op.value('dose.transformation', as.character, "Log10") # log10, none
 dt <- switch(dose.transformation,
              Log = exp(1),
              Log10 = 10,
@@ -112,6 +112,9 @@ if(model.function == "LL.4") {
     mutate(Span = d - c)
 } 
 
+df = df_result %>% 
+  dplyr::filter(!is.na(pseudo_R2))
+
 sum.table <- df_result %>%
   dplyr::select(-x.pred, -y.pred) %>%
   unique() %>% 
@@ -120,7 +123,6 @@ sum.table <- df_result %>%
   ctx$addNamespace() 
 
 pred.table <- df_result %>%
-  dplyr::filter(!is.na(x.pred)) %>% 
   dplyr::select(.ri, .ci, x.pred, y.pred) %>%
   dplyr::rename(x_pred = x.pred, y_pred = y.pred) %>%
   arrange(.ri, .ci) %>%
