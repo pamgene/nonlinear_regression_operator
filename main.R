@@ -89,8 +89,8 @@ df_result <- dt_in[,
           }
         }
       } else {
+        x.pred <- seq(min(.x), max(.x), length.out = n.predictions)
         if(length(unique(.y)) == 1) {
-          x.pred <- seq(min(.x), max(.x), length.out = n.predictions)
           out <- data.frame(x.pred = x.pred, y.pred = .y[1])
           out[paste0("X", response.output)] <- NA_real_
           out[paste0("Y", response.output)] <- .y[1]
@@ -120,6 +120,7 @@ sum.table <- df_result %>%
   ctx$addNamespace() 
 
 pred.table <- df_result %>%
+  dplyr::filter(!is.na(x.pred)) %>% 
   dplyr::select(.ri, .ci, x.pred, y.pred) %>%
   dplyr::rename(x_pred = x.pred, y_pred = y.pred) %>%
   arrange(.ri, .ci) %>%
